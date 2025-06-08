@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import HeroSection from "@/components/HeroSection";
+import WalletDisplay from "@/components/WalletDisplay";
 import { BtcWallet } from "@/types";
 
 export default function Home() {
@@ -9,7 +10,6 @@ export default function Home() {
   console.log("wallet", wallet);
 
   const handleGenerateWallet = async () => {
-    console.log("generate wallet");
     try {
       const response = await fetch("/api/generate-wallet");
       const data = await response.json();
@@ -21,7 +21,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <HeroSection onGenerateWallet={handleGenerateWallet} />
+      {!wallet && <HeroSection onGenerateWallet={handleGenerateWallet} />}
+      <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-center">
+        <div className="w-full max-w-4xl space-y-8 flex flex-col items-center justify-center">
+          {wallet && <WalletDisplay wallet={wallet} />}
+        </div>
+      </main>
     </div>
   );
 }

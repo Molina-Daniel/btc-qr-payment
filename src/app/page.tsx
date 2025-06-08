@@ -4,11 +4,12 @@ import { useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import WalletDisplay from "@/components/WalletDisplay";
 import PaymentForm from "@/components/PaymentForm";
+import PaymentQR from "@/components/PaymentQR";
 import { BtcWallet } from "@/types";
 
 export default function Home() {
   const [wallet, setWallet] = useState<BtcWallet | null>(null);
-  console.log("wallet", wallet);
+  const [btcAmount, setBtcAmount] = useState<string>("");
 
   const handleGenerateWallet = async () => {
     try {
@@ -20,6 +21,10 @@ export default function Home() {
     }
   };
 
+  const handleAmountSubmit = (btcAmount: string) => {
+    setBtcAmount(btcAmount);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       {!wallet && <HeroSection onGenerateWallet={handleGenerateWallet} />}
@@ -27,7 +32,10 @@ export default function Home() {
         <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-center">
           <div className="w-full max-w-4xl space-y-8 flex flex-col items-center justify-center">
             <WalletDisplay wallet={wallet} />
-            <PaymentForm />
+            <PaymentForm onSubmit={handleAmountSubmit} />
+            {wallet && btcAmount && (
+              <PaymentQR wallet={wallet} amount={btcAmount} />
+            )}
           </div>
         </main>
       )}

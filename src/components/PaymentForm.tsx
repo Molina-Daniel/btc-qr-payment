@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import Decimal from "decimal.js";
 
-const PaymentForm = () => {
+interface PaymentFormProps {
+  onSubmit: (btcAmount: string) => void;
+}
+
+const PaymentForm = ({ onSubmit }: PaymentFormProps) => {
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
 
@@ -64,7 +68,7 @@ const PaymentForm = () => {
     setError("");
 
     const preciseAmount = new Decimal(amount);
-    console.log(preciseAmount.toString());
+    onSubmit(preciseAmount.toString());
   };
 
   return (

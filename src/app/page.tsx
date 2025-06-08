@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection";
 import WalletDisplay from "@/components/WalletDisplay";
 import PaymentForm from "@/components/PaymentForm";
 import PaymentQR from "@/components/PaymentQR";
+import PaymentStatus from "@/components/PaymentStatus";
 import { BtcWallet, PaymentStatus as PaymentStatusType } from "@/types";
 
 export default function Home() {
@@ -13,7 +14,6 @@ export default function Home() {
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatusType | null>(
     null
   );
-  console.log("paymentStatus", paymentStatus);
 
   const handleGenerateWallet = async () => {
     try {
@@ -79,7 +79,10 @@ export default function Home() {
             <WalletDisplay wallet={wallet} />
             <PaymentForm onSubmit={handleAmountSubmit} />
             {wallet && btcAmount && (
-              <PaymentQR wallet={wallet} amount={btcAmount} />
+              <>
+                <PaymentQR wallet={wallet} amount={btcAmount} />
+                {paymentStatus && <PaymentStatus status={paymentStatus} />}
+              </>
             )}
           </div>
         </main>

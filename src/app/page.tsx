@@ -6,14 +6,21 @@ import WalletDisplay from "@/components/WalletDisplay";
 import PaymentForm from "@/components/PaymentForm";
 import PaymentQR from "@/components/PaymentQR";
 import PaymentStatus from "@/components/PaymentStatus";
-import { BtcWallet, PaymentStatus as PaymentStatusType } from "@/types";
+import PaymentsReceived from "@/components/PaymentsReceived";
+import {
+  BtcWallet,
+  PaymentStatus as PaymentStatusType,
+  Transaction,
+} from "@/types";
 
 export default function Home() {
   const [wallet, setWallet] = useState<BtcWallet | null>(null);
   const [btcAmount, setBtcAmount] = useState<string>("");
+  const [requestTimestamp, setRequestTimestamp] = useState<number | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatusType | null>(
     null
   );
+  const [receivedPayments, setReceivedPayments] = useState<Transaction[]>([]);
 
   const handleGenerateWallet = async () => {
     try {
@@ -25,33 +32,45 @@ export default function Home() {
     }
   };
 
-  const handleAmountSubmit = (btcAmount: string) => {
-    setBtcAmount(btcAmount);
-    checkPaymentStatus(btcAmount);
+  const handleAmountSubmit = (newAmount: string) => {
+    const now = Date.now();
+    setBtcAmount(newAmount);
+    setRequestTimestamp(now);
+    setPaymentStatus({ status: "LISTENING", message: "Initializing..." });
+    setReceivedPayments([]);
+    checkPaymentStatus(newAmount, now);
   };
 
   const checkPaymentStatus = useCallback(
-    async (amountOverride?: string) => {
+    async (amountOverride?: string, timestampOverride?: number) => {
       const currentAmount = amountOverride || btcAmount;
-      if (!wallet || !currentAmount) return;
+      const currentTimestamp = timestampOverride || requestTimestamp;
+
+      if (!wallet || !currentAmount || !currentTimestamp) return;
 
       try {
         const response = await fetch(
-          `/api/check-payment?address=${wallet.address}&amount=${currentAmount}`
+          `/api/check-payment?address=${wallet.address}&amount=${currentAmount}&requestTimestamp=${currentTimestamp}`
         );
+        if (!response.ok) throw new Error("API request failed.");
         const data = await response.json();
-        setPaymentStatus(data);
+        setPaymentStatus(data.paymentStatus);
+        setReceivedPayments(data.receivedPayments);
       } catch (error) {
         console.error("Error checking payment status:", error);
+        setPaymentStatus({
+          status: "API_ERROR",
+          message: "Could not connect to the server.",
+        });
       }
     },
-    [wallet, btcAmount]
+    [wallet, btcAmount, requestTimestamp]
   );
 
   useEffect(() => {
-    if (!btcAmount || !wallet) return;
+    if (!btcAmount || !wallet || !requestTimestamp) return;
 
-    const finalStates = [
+    const finalStates: PaymentStatusType["status"][] = [
       "PAYMENT_CONFIRMED",
       "ERROR_UNDERPAID",
       "ERROR_MULTIPLE",
@@ -65,10 +84,10 @@ export default function Home() {
 
     const intervalId = setInterval(() => {
       checkPaymentStatus();
-    }, 30000);
+    }, 15000); // Poll every 15 seconds
 
     return () => clearInterval(intervalId);
-  }, [btcAmount, wallet, checkPaymentStatus, paymentStatus]);
+  }, [btcAmount, wallet, requestTimestamp, checkPaymentStatus, paymentStatus]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -84,6 +103,7 @@ export default function Home() {
                 {paymentStatus && <PaymentStatus status={paymentStatus} />}
               </>
             )}
+            {receivedPayments.length > 0 && <PaymentsReceived />}
           </div>
         </main>
       )}

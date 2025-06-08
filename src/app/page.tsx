@@ -3,6 +3,7 @@
 import { useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import WalletDisplay from "@/components/WalletDisplay";
+import PaymentForm from "@/components/PaymentForm";
 import { BtcWallet } from "@/types";
 
 export default function Home() {
@@ -22,11 +23,14 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       {!wallet && <HeroSection onGenerateWallet={handleGenerateWallet} />}
-      <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-center">
-        <div className="w-full max-w-4xl space-y-8 flex flex-col items-center justify-center">
-          {wallet && <WalletDisplay wallet={wallet} />}
-        </div>
-      </main>
+      {wallet && (
+        <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-center">
+          <div className="w-full max-w-4xl space-y-8 flex flex-col items-center justify-center">
+            <WalletDisplay wallet={wallet} />
+            <PaymentForm />
+          </div>
+        </main>
+      )}
     </div>
   );
 }

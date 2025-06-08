@@ -21,9 +21,12 @@ const WalletDisplay = ({ wallet }: { wallet: BtcWallet }) => {
           New Testnet Wallet Generated
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div>
-          <Label htmlFor="btcAddress" className="text-sm text-muted-foreground">
+      <CardContent className="space-y-2">
+        <div className="space-y-1">
+          <Label
+            htmlFor="btcAddress"
+            className="text-sm font-medium text-muted-foreground"
+          >
             BTC Address (Testnet)
           </Label>
           <div className="flex items-center space-x-2">

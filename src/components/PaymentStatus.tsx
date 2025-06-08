@@ -52,10 +52,7 @@ const StatusIcon = ({ status }: { status: PaymentStatus["status"] }) => {
           className={`${iconProps.className} text-green-500`}
         />
       );
-    case "ERROR_UNDERPAID":
-    case "ERROR_MULTIPLE":
     case "API_ERROR":
-    case "TIMEOUT":
       return (
         <XCircle
           {...iconProps}
@@ -80,12 +77,12 @@ const PaymentStatusDisplay = ({ status }: PaymentStatusDisplayProps) => {
           Payment Status
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col items-center justify-center p-8">
+      <CardContent className="flex flex-col items-center justify-center px-8 pb-4">
         <StatusIcon status={status.status} />
         <p className="text-lg font-semibold mb-2">{status.message}</p>
 
         {status.details?.transactionId && (
-          <div className="text-sm text-muted-foreground mb-4">
+          <div className="text-sm text-muted-foreground font-code mb-4">
             <p>Transaction ID:</p>
             <Link
               href={`${MEMPOOL_EXPLORER_URL}${status.details.transactionId}`}
@@ -95,14 +92,6 @@ const PaymentStatusDisplay = ({ status }: PaymentStatusDisplayProps) => {
             >
               {status.details.transactionId}
             </Link>
-          </div>
-        )}
-
-        {status.status === "ERROR_UNDERPAID" && status.details && (
-          <div className="text-sm text-red-400">
-            Expected: {status.details.expectedAmountSatoshis} sats
-            <br />
-            Received: {status.details.receivedAmountSatoshis} sats
           </div>
         )}
       </CardContent>

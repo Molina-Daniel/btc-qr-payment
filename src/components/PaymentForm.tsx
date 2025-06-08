@@ -68,7 +68,7 @@ const PaymentForm = ({ onSubmit }: PaymentFormProps) => {
     setError("");
 
     const preciseAmount = new Decimal(amount);
-    onSubmit(preciseAmount.toString());
+    onSubmit(preciseAmount.toFixed(8));
   };
 
   return (

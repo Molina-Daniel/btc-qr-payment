@@ -72,10 +72,7 @@ export default function Home() {
 
     const finalStates: PaymentStatusType["status"][] = [
       "PAYMENT_CONFIRMED",
-      "ERROR_UNDERPAID",
-      "ERROR_MULTIPLE",
       "API_ERROR",
-      "TIMEOUT",
     ];
 
     if (paymentStatus && finalStates.includes(paymentStatus.status)) {
@@ -90,7 +87,7 @@ export default function Home() {
   }, [btcAmount, wallet, requestTimestamp, checkPaymentStatus, paymentStatus]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       {!wallet && <HeroSection onGenerateWallet={handleGenerateWallet} />}
       {wallet && (
         <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-center">
@@ -103,7 +100,12 @@ export default function Home() {
                 {paymentStatus && <PaymentStatus status={paymentStatus} />}
               </>
             )}
-            {receivedPayments.length > 0 && <PaymentsReceived />}
+            {receivedPayments.length > 0 && (
+              <PaymentsReceived
+                transactions={receivedPayments}
+                address={wallet.address}
+              />
+            )}
           </div>
         </main>
       )}

@@ -55,10 +55,7 @@ export type PaymentStatusEnum =
   | "PAYMENT_DETECTED"
   | "CONFIRMING"
   | "PAYMENT_CONFIRMED"
-  | "ERROR_UNDERPAID"
-  | "ERROR_MULTIPLE"
-  | "API_ERROR"
-  | "TIMEOUT";
+  | "API_ERROR";
 
 export interface PaymentStatus {
   status: PaymentStatusEnum;

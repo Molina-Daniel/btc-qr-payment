@@ -42,7 +42,7 @@ const PaymentQR = ({ wallet, amount }: PaymentQRProps) => {
           </p>
           <p>
             Amount:{" "}
-            <span className="text-[#10B981] font-semibold">{amount} BTC</span>
+            <span className="text-emerald-400 font-semibold">{amount} BTC</span>
           </p>
         </div>
         <Button

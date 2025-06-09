@@ -4,6 +4,7 @@ import * as bip39 from "bip39";
 import * as ecc from "tiny-secp256k1";
 import BIP32Factory from "bip32";
 import type { BtcWallet } from "@/types/index";
+import { encrypt } from "@/lib/crypto";
 
 const bip32 = BIP32Factory(ecc); // Initialize bip32 with ecc
 
@@ -42,7 +43,15 @@ export async function GET() {
     // Note: This is the private key for the derived child, not the master root.
     const privateKeyWIF = child.toWIF();
 
-    const wallet: BtcWallet = { address, mnemonic, privateKeyWIF };
+    // 7. Encrypt sensitive data
+    const encryptedMnemonic = encrypt(mnemonic);
+    const encryptedPrivateKeyWIF = encrypt(privateKeyWIF);
+
+    const wallet: BtcWallet = {
+      address,
+      mnemonic: encryptedMnemonic,
+      privateKeyWIF: encryptedPrivateKeyWIF,
+    };
 
     return NextResponse.json(wallet);
   } catch (error) {

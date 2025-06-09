@@ -16,7 +16,7 @@ import {
 import { useWallet } from "@/contexts/WalletContext";
 
 const WalletDisplay = () => {
-  const { wallet } = useWallet();
+  const { wallet, getDecryptedMnemonic, getDecryptedPrivateKey } = useWallet();
   const [isMnemonicVisible, setIsMnemonicVisible] = useState(false);
   const [isPrivateKeyVisible, setIsPrivateKeyVisible] = useState(false);
 
@@ -25,6 +25,20 @@ const WalletDisplay = () => {
   const handleCopyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
     toast.success(`${label} copied to clipboard`);
+  };
+
+  const handleMnemonicCopy = () => {
+    const mnemonic = getDecryptedMnemonic();
+    if (mnemonic) {
+      handleCopyToClipboard(mnemonic, "Mnemonic");
+    }
+  };
+
+  const handlePrivateKeyCopy = () => {
+    const privateKey = getDecryptedPrivateKey();
+    if (privateKey) {
+      handleCopyToClipboard(privateKey, "Private Key");
+    }
   };
 
   return (
@@ -69,7 +83,7 @@ const WalletDisplay = () => {
               readOnly
               value={
                 isMnemonicVisible
-                  ? wallet.mnemonic
+                  ? getDecryptedMnemonic() || ""
                   : "••• ••• ••• ••• ••• ••• ••• ••• ••• ••• ••• •••"
               }
               className="font-code text-sm flex-grow"
@@ -89,9 +103,7 @@ const WalletDisplay = () => {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() =>
-                  handleCopyToClipboard(wallet.mnemonic, "Mnemonic")
-                }
+                onClick={handleMnemonicCopy}
               >
                 <ClipboardCopy className="h-4 w-4" />
               </Button>
@@ -109,15 +121,16 @@ const WalletDisplay = () => {
             <Input
               id="privateKeyWIF"
               readOnly
+              type={isPrivateKeyVisible ? "text" : "password"}
               value={
                 // Even when visible, we only show a masked version for security
                 // The full key can be copied using the button
                 isPrivateKeyVisible
-                  ? `${wallet.privateKeyWIF.substring(
+                  ? `${getDecryptedPrivateKey()?.substring(
                       0,
                       10
-                    )}...${wallet.privateKeyWIF.substring(
-                      wallet.privateKeyWIF.length - 10
+                    )}...${getDecryptedPrivateKey()?.substring(
+                      (getDecryptedPrivateKey()?.length ?? 0) - 10
                     )}`
                   : "•••••••••••••••••••••••••••••"
               }
@@ -137,9 +150,7 @@ const WalletDisplay = () => {
             <Button
               variant="outline"
               size="icon"
-              onClick={() =>
-                handleCopyToClipboard(wallet.privateKeyWIF, "Private Key")
-              }
+              onClick={handlePrivateKeyCopy}
             >
               <ClipboardCopy className="h-4 w-4" />
             </Button>

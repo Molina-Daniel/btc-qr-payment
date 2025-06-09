@@ -2,12 +2,15 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import { BtcWallet } from "@/types";
+import { decrypt } from "@/lib/crypto";
 
 interface WalletContextType {
   wallet: BtcWallet | null;
   isGenerating: boolean;
   error: string | null;
   generateWallet: () => Promise<void>;
+  getDecryptedMnemonic: () => string | null;
+  getDecryptedPrivateKey: () => string | null;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -40,6 +43,17 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Methods to decrypt sensitive data when needed
+  const getDecryptedMnemonic = () => {
+    if (!wallet) return null;
+    return decrypt(wallet.mnemonic);
+  };
+
+  const getDecryptedPrivateKey = () => {
+    if (!wallet) return null;
+    return decrypt(wallet.privateKeyWIF);
+  };
+
   return (
     <WalletContext.Provider
       value={{
@@ -47,6 +61,8 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         isGenerating,
         error,
         generateWallet,
+        getDecryptedMnemonic,
+        getDecryptedPrivateKey,
       }}
     >
       {children}

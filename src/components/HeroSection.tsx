@@ -1,13 +1,12 @@
 "use client";
 
-import { Zap } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useWallet } from "@/contexts/WalletContext";
 
-interface HeroSectionProps {
-  onGenerateWallet: () => void;
-}
+const HeroSection = () => {
+  const { generateWallet, isGenerating } = useWallet();
 
-const HeroSection = ({ onGenerateWallet }: HeroSectionProps) => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center space-y-8 max-w-4xl mx-auto">
@@ -33,11 +32,12 @@ const HeroSection = ({ onGenerateWallet }: HeroSectionProps) => {
 
         <div className="pt-4">
           <Button
-            onClick={onGenerateWallet}
+            onClick={generateWallet}
             size="lg"
             className="text-lg px-8 py-6 bg-blue-400 hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
           >
-            Generate Wallet
+            {isGenerating ? "Generating..." : "Generate New Wallet"}
+            {!isGenerating && <ArrowRight className="ml-2 h-5 w-5" />}
           </Button>
         </div>
 

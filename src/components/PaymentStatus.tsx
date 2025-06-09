@@ -10,15 +10,12 @@ import {
   XCircle,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PaymentStatus } from "@/types";
-
-interface PaymentStatusDisplayProps {
-  status: PaymentStatus;
-}
+import { PaymentStatusEnum } from "@/types";
+import { usePayment } from "@/contexts/PaymentContext";
 
 const MEMPOOL_EXPLORER_URL = "https://mempool.space/testnet4/tx/";
 
-const StatusIcon = ({ status }: { status: PaymentStatus["status"] }) => {
+const StatusIcon = ({ status }: { status: PaymentStatusEnum }) => {
   const iconProps = {
     className: "h-16 w-16 mb-4",
   };
@@ -69,7 +66,11 @@ const StatusIcon = ({ status }: { status: PaymentStatus["status"] }) => {
   }
 };
 
-const PaymentStatusDisplay = ({ status }: PaymentStatusDisplayProps) => {
+const PaymentStatus = () => {
+  const { paymentStatus } = usePayment();
+
+  if (!paymentStatus) return null;
+
   return (
     <Card className="w-full max-w-lg shadow-2xl bg-card/80 backdrop-blur-sm text-center">
       <CardHeader>
@@ -78,19 +79,19 @@ const PaymentStatusDisplay = ({ status }: PaymentStatusDisplayProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center justify-center px-8 pb-4">
-        <StatusIcon status={status.status} />
-        <p className="text-lg font-semibold mb-2">{status.message}</p>
+        <StatusIcon status={paymentStatus.status} />
+        <p className="text-lg font-semibold mb-2">{paymentStatus.message}</p>
 
-        {status.details?.transactionId && (
+        {paymentStatus.details?.transactionId && (
           <div className="text-sm text-muted-foreground font-code mb-4">
             <p>Transaction ID:</p>
             <Link
-              href={`${MEMPOOL_EXPLORER_URL}${status.details.transactionId}`}
+              href={`${MEMPOOL_EXPLORER_URL}${paymentStatus.details.transactionId}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline break-all"
             >
-              {status.details.transactionId}
+              {paymentStatus.details.transactionId}
             </Link>
           </div>
         )}
@@ -99,4 +100,4 @@ const PaymentStatusDisplay = ({ status }: PaymentStatusDisplayProps) => {
   );
 };
 
-export default PaymentStatusDisplay;
+export default PaymentStatus;

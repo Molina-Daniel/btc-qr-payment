@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/sonner";
+import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
+import { AppProviders } from "@/contexts/AppProviders";
 import "./globals.css";
 
+const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
-  title: "⚡ BTC QR App",
-  description:
-    "Instantly Generate Bitcoin Testnet Payment Requests. Create disposable testnet wallets, generate payment QR codes, and detect payments in real-time — no setup or API keys required.",
+  title: "BTC ⚡ Testnet Payment QR",
+  description: "Generate BTC testnet payment QR codes",
 };
 
 export default function RootLayout({
@@ -15,8 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
-      <Toaster />
+      <body className={inter.className}>
+        <AppProviders>{children}</AppProviders>
+        <Toaster />
+      </body>
     </html>
   );
 }

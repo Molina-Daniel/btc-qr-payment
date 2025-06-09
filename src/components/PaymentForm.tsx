@@ -2,17 +2,15 @@
 
 import { useState } from "react";
 import { DollarSign, QrCode } from "lucide-react";
+import Decimal from "decimal.js";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@radix-ui/react-label";
-import Decimal from "decimal.js";
+import { usePayment } from "@/contexts/PaymentContext";
 
-interface PaymentFormProps {
-  onSubmit: (btcAmount: string) => void;
-}
-
-const PaymentForm = ({ onSubmit }: PaymentFormProps) => {
+const PaymentForm = () => {
+  const { submitPaymentRequest } = usePayment();
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
 
@@ -68,7 +66,7 @@ const PaymentForm = ({ onSubmit }: PaymentFormProps) => {
     setError("");
 
     const preciseAmount = new Decimal(amount);
-    onSubmit(preciseAmount.toFixed(8));
+    submitPaymentRequest(preciseAmount.toFixed(8));
   };
 
   return (

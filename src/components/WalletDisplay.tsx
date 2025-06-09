@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import {
   ClipboardCopy,
   AlertTriangle,
@@ -13,11 +13,14 @@ import {
   EyeOff,
   Eye,
 } from "lucide-react";
-import { BtcWallet } from "@/types";
+import { useWallet } from "@/contexts/WalletContext";
 
-const WalletDisplay = ({ wallet }: { wallet: BtcWallet }) => {
+const WalletDisplay = () => {
+  const { wallet } = useWallet();
   const [isMnemonicVisible, setIsMnemonicVisible] = useState(false);
   const [isPrivateKeyVisible, setIsPrivateKeyVisible] = useState(false);
+
+  if (!wallet) return null;
 
   const handleCopyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);

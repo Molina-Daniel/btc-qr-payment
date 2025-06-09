@@ -1,20 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Transaction } from "@/types";
 import { History, ExternalLink } from "lucide-react";
-
-interface PaymentsReceivedProps {
-  transactions: Transaction[];
-  address: string;
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useWallet } from "@/contexts/WalletContext";
+import { usePayment } from "@/contexts/PaymentContext";
 
 const MEMPOOL_EXPLORER_URL = "https://mempool.space/testnet4/tx/";
 
-const PaymentsReceived = ({ transactions, address }: PaymentsReceivedProps) => {
+const PaymentsReceived = () => {
+  const { wallet } = useWallet();
+  const { receivedPayments } = usePayment();
+
+  if (!wallet || !receivedPayments.length) return null;
+
   // Sort transactions from newest to oldest
-  const sortedTransactions = [...transactions].sort(
+  const sortedTransactions = [...receivedPayments].sort(
     (a, b) => (b.status.block_time ?? 0) - (a.status.block_time ?? 0)
   );
 
@@ -30,7 +31,7 @@ const PaymentsReceived = ({ transactions, address }: PaymentsReceivedProps) => {
         <ul className="space-y-4">
           {sortedTransactions.map((tx) => {
             const receivedAmountSats = tx.vout
-              .filter((vout) => vout.scriptpubkey_address === address)
+              .filter((vout) => vout.scriptpubkey_address === wallet.address)
               .reduce((sum, vout) => sum + vout.value, 0);
 
             const receivedAmountBtc = receivedAmountSats / 1e8;

@@ -3,15 +3,17 @@ import { QRCodeSVG } from "qrcode.react";
 import { ClipboardCopy, QrCodeIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BtcWallet } from "@/types";
+import { useWallet } from "@/contexts/WalletContext";
+import { usePayment } from "@/contexts/PaymentContext";
 
-interface PaymentQRProps {
-  wallet: BtcWallet;
-  amount: string;
-}
+const PaymentQR = () => {
+  const { wallet } = useWallet();
+  const { btcAmount } = usePayment();
 
-const PaymentQR = ({ wallet, amount }: PaymentQRProps) => {
-  const bitcoinUri = `bitcoin:${wallet.address}?amount=${amount}`;
+  if (!wallet || !btcAmount) return null;
+
+  // Create a Bitcoin URI for the QR code
+  const bitcoinUri = `bitcoin:${wallet.address}?amount=${btcAmount}`;
   const truncatedAddress = `${wallet.address.slice(
     0,
     8
@@ -43,7 +45,9 @@ const PaymentQR = ({ wallet, amount }: PaymentQRProps) => {
           </p>
           <p>
             Amount:{" "}
-            <span className="text-emerald-400 font-semibold">{amount} BTC</span>
+            <span className="text-emerald-400 font-semibold">
+              {btcAmount} BTC
+            </span>
           </p>
         </div>
         <Button

@@ -157,7 +157,6 @@ export async function GET(request: Request) {
       receivedPayments,
     });
   } catch (error) {
-    console.error("Error in check-payment API:", error);
     const errorMessage =
       error instanceof Error ? error.message : "An unknown error occurred.";
     const apiErrorStatus: PaymentStatus = {

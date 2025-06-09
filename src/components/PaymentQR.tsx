@@ -1,8 +1,9 @@
+import { toast } from "sonner";
+import { QRCodeSVG } from "qrcode.react";
+import { ClipboardCopy, QrCodeIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ClipboardCopy, QrCodeIcon } from "lucide-react";
 import { BtcWallet } from "@/types";
-import { QRCodeSVG } from "qrcode.react";
 
 interface PaymentQRProps {
   wallet: BtcWallet;
@@ -18,7 +19,7 @@ const PaymentQR = ({ wallet, amount }: PaymentQRProps) => {
 
   const handleCopyUri = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    console.log(`${label} copied to clipboard`);
+    toast.success(`${label} copied to clipboard`);
   };
 
   return (

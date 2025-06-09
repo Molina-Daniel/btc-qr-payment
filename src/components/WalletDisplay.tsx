@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   ClipboardCopy,
   AlertTriangle,
@@ -20,7 +21,7 @@ const WalletDisplay = ({ wallet }: { wallet: BtcWallet }) => {
 
   const handleCopyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    console.log(`${label} copied to clipboard`);
+    toast.success(`${label} copied to clipboard`);
   };
 
   return (

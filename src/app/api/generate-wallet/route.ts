@@ -46,7 +46,6 @@ export async function GET() {
 
     return NextResponse.json(wallet);
   } catch (error) {
-    console.error("Error generating wallet:", error);
     throw new Error(
       error instanceof Error ? error.message : "Unknown error generating wallet"
     );

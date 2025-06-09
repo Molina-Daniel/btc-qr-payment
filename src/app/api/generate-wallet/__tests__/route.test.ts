@@ -8,6 +8,12 @@ jest.mock("next/server", () => ({
   },
 }));
 
+// Mock the crypto module
+jest.mock("@/lib/crypto", () => ({
+  encrypt: jest.fn((text) => `encrypted_${text}`),
+  decrypt: jest.fn((text) => text.replace("encrypted_", "")),
+}));
+
 jest.mock("bitcoinjs-lib", () => ({
   networks: {
     testnet: { someTestnetProperty: "test" },
@@ -62,6 +68,7 @@ import { GET } from "../route";
 import * as bitcoinjs from "bitcoinjs-lib";
 import * as bip39 from "bip39";
 import { NextResponse } from "next/server";
+import { encrypt } from "@/lib/crypto";
 
 describe("Generate Wallet API Route", () => {
   beforeEach(() => {
@@ -75,9 +82,12 @@ describe("Generate Wallet API Route", () => {
     expect(responseData).toHaveProperty("address", "tb1qtest123456789");
     expect(responseData).toHaveProperty(
       "mnemonic",
-      "test word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12"
+      "encrypted_test word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12"
     );
-    expect(responseData).toHaveProperty("privateKeyWIF", "mockprivatekeywif");
+    expect(responseData).toHaveProperty(
+      "privateKeyWIF",
+      "encrypted_mockprivatekeywif"
+    );
     expect(NextResponse.json).toHaveBeenCalled();
   });
 
@@ -90,6 +100,9 @@ describe("Generate Wallet API Route", () => {
       pubkey: expect.any(Buffer),
       network: bitcoinjs.networks.testnet,
     });
+
+    // Verify encryption was called for sensitive data
+    expect(encrypt).toHaveBeenCalledWith(expect.any(String));
   });
 
   it("should handle errors correctly", async () => {

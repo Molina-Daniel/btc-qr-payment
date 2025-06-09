@@ -2,11 +2,13 @@
 
 import { useCallback, useState, useEffect } from "react";
 import HeroSection from "@/components/HeroSection";
+import Header from "@/components/Header";
 import WalletDisplay from "@/components/WalletDisplay";
 import PaymentForm from "@/components/PaymentForm";
 import PaymentQR from "@/components/PaymentQR";
 import PaymentStatus from "@/components/PaymentStatus";
 import PaymentsReceived from "@/components/PaymentsReceived";
+import Footer from "@/components/Footer";
 import {
   BtcWallet,
   PaymentStatus as PaymentStatusType,
@@ -87,28 +89,34 @@ export default function Home() {
   }, [btcAmount, wallet, requestTimestamp, checkPaymentStatus, paymentStatus]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      {!wallet && <HeroSection onGenerateWallet={handleGenerateWallet} />}
-      {wallet && (
-        <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-center">
-          <div className="w-full max-w-4xl space-y-8 flex flex-col items-center justify-center">
-            <WalletDisplay wallet={wallet} />
-            <PaymentForm onSubmit={handleAmountSubmit} />
-            {wallet && btcAmount && (
-              <>
-                <PaymentQR wallet={wallet} amount={btcAmount} />
-                {paymentStatus && <PaymentStatus status={paymentStatus} />}
-              </>
-            )}
-            {receivedPayments.length > 0 && (
-              <PaymentsReceived
-                transactions={receivedPayments}
-                address={wallet.address}
-              />
-            )}
-          </div>
-        </main>
-      )}
-    </div>
+    <>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        {!wallet && <HeroSection onGenerateWallet={handleGenerateWallet} />}
+        {wallet && (
+          <>
+            <Header />
+            <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-start">
+              <div className="w-full max-w-4xl space-y-8 flex flex-col items-center justify-center">
+                <WalletDisplay wallet={wallet} />
+                <PaymentForm onSubmit={handleAmountSubmit} />
+                {wallet && btcAmount && (
+                  <>
+                    <PaymentQR wallet={wallet} amount={btcAmount} />
+                    {paymentStatus && <PaymentStatus status={paymentStatus} />}
+                  </>
+                )}
+                {receivedPayments.length > 0 && (
+                  <PaymentsReceived
+                    transactions={receivedPayments}
+                    address={wallet.address}
+                  />
+                )}
+              </div>
+            </main>
+          </>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 }

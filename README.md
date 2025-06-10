@@ -1,12 +1,12 @@
 # ⚡ BTC Testnet QR Payment Generator
 
-A Next.js-based web application that allows developers to instantly generate Bitcoin Testnet payment requests via QR codes. It creates ephemeral HD wallets, displays payment information, and polls the blockchain in real-time to detect transaction confirmations.
+A Next.js-based web application that allows anyone to instantly generate Bitcoin Testnet payment requests via QR codes. It creates ephemeral HD wallets, displays payment information, and polls the blockchain in real-time to detect transaction confirmations.
 
-![BTC QR App Screenshot](https://user-images.githubusercontent.com/1355416/188311218-971762c7-01e4-411a-969c-4a33a8a3b839.png)
+![BTC QR App Screenshot](/public/app_home.png)
 
-## Description
+## Overview
 
-This project is a developer tool designed to simplify the process of testing Bitcoin Testnet payment flows. It provides a seamless, single-page application experience with the following workflow:
+This project is a tool designed to simplify the process of testing Bitcoin Testnet payment flows. It provides a seamless, single-page application experience with the following workflow:
 
 1.  **Generate Wallet**: A new, temporary Bitcoin Testnet HD wallet is created for each session.
 2.  **Set Amount**: The user specifies the amount of BTC to request.
@@ -19,13 +19,16 @@ The entire process requires no setup, no user accounts, and no API keys, making 
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Workflow](#workflow)
 - [Project Structure](#project-structure)
 - [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Performance](#performance)
 - [Configuration](#configuration)
 - [Examples](#examples)
 - [Contributing](#contributing)
 - [Tests](#tests)
-- [Roadmap](#roadmap)
+- [Future Improvements](#future-improvements)
 - [License](#license)
 - [FAQ](#faq)
 
@@ -129,6 +132,36 @@ Once the application is running, follow these steps:
 4.  Scan the generated QR code with a Bitcoin testnet wallet (e.g., Electrum in testnet mode, or a mobile wallet that supports testnet).
 5.  Send the payment. The application will monitor the blockchain and update the payment status in real-time, from "Payment Detected" to "Confirming" and finally "Payment Confirmed".
 
+## Workflow
+
+This section illustrates the typical user flow from generating a wallet to receiving a payment confirmation.
+
+### 1. Generate a New Wallet
+
+The process begins by clicking the **"Generate Wallet"** button on the hero section. This creates a new, ephemeral testnet wallet for the session.
+
+![Generate Wallet Step](/public/workflow_step_1_generate_wallet.png)
+
+### 2. Enter Payment Amount
+
+Once the wallet is generated, the user specifies the amount of BTC to request in the payment form and clicks **"Create Payment QR"**.
+
+![Enter Amount Step](/public/workflow_step_2_enter_amount.png)
+
+### 3. Scan the QR Code to Pay
+
+The application generates and displays a BIP-21 compliant QR code. The user can scan this with any testnet-compatible mobile wallet to send the specified amount to the generated address.
+
+![Scan QR Code Step](/public/workflow_step_3_scan_qr.png)
+
+### 4. Monitor Payment Status
+
+After the QR code is displayed, the application begins polling the blockchain. The UI provides real-time feedback as the transaction is detected in the mempool and then confirmed. A list of all received payments is also displayed.
+
+![Monitor Payment Step](/public/workflow_step_4_monitor_payment.png)
+
+![Completed Payment](/public/payment_completed.png)
+
 ## Features
 
 - **Ephemeral HD Wallet Generation**: Creates a new BIP39-compliant Bitcoin Testnet wallet for each session using `bitcoinjs-lib`.
@@ -138,6 +171,27 @@ Once the application is running, follow these steps:
 - **Responsive Design**: Fully responsive interface built with TailwindCSS and ShadCN, ensuring a seamless experience on both desktop and mobile devices.
 - **Secure On-Demand Decryption**: To enhance security, the wallet's mnemonic and private key are encrypted on the server _before_ being sent to the client. They remain encrypted in the application's state and are only decrypted in the browser on-demand when the user explicitly chooses to view them. This prevents sensitive data from being exposed in plaintext in network responses or React component state.
 - **Ephemeral & Secure**: No private keys or mnemonics are ever stored on a server. The wallet is generated client-side and exists only for the duration of the session.
+
+## Tech Stack
+
+This project is built with a modern, type-safe, and efficient stack:
+
+| Category                | Technology / Library                                                                                                                                  |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Core Framework**      | [Next.js](https://nextjs.org/) 15 (App Router), [React](https://react.dev/) 19                                                                        |
+| **Language**            | [TypeScript](https://www.typescriptlang.org/)                                                                                                         |
+| **Styling**             | [Tailwind CSS](https://tailwindcss.com/), [ShadCN/UI](https://ui.shadcn.com/)                                                                         |
+| **Bitcoin & Wallet**    | [bitcoinjs-lib](https://github.com/bitcoinjs/bitcoinjs-lib), [bip39](https://github.com/bitcoinjs/bip39), [bip32](https://github.com/bitcoinjs/bip32) |
+| **QR Code Generation**  | [qrcode.react](https://github.com/zpao/qrcode.react)                                                                                                  |
+| **State Management**    | React Context                                                                                                                                         |
+| **Testing**             | [Jest](https://jestjs.io/), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)                                    |
+| **Blockchain Data API** | [Mempool.space](https://mempool.space/docs/api) Testnet API                                                                                           |
+
+## Performance
+
+This application is optimized for performance, accessibility, and SEO, as measured by Google Lighthouse. It achieves top scores, ensuring a fast and user-friendly experience.
+
+![Lighthouse Performance Report](/public/lighthouse_performance.png)
 
 ## Configuration
 
@@ -182,6 +236,8 @@ Contributions are welcome! If you have suggestions for improvements, please open
 
 This project uses Jest for unit testing. The API routes have corresponding tests to ensure their logic is correct.
 
+![Test Coverage](/public/test_coverage.png)
+
 To run the test suite:
 
 ```bash
@@ -194,13 +250,27 @@ To run tests in watch mode:
 npm run test:watch
 ```
 
-## Roadmap
+## Future Improvements
 
-- [ ] Add support for different public blockchain explorers.
-- [ ] Implement a timeout for payment requests.
-- [ ] Add more animations and UI transitions for a smoother user experience.
-- [ ] Integrate a BTC-to-fiat conversion display.
-- [ ] Add i18n support for multiple languages.
+While the current application is fully functional for its intended purpose, there are several opportunities for future enhancements to improve its robustness, efficiency, and feature set.
+
+### Architecture & Backend
+
+- **API Layer Enhancements**: Implement rate limiting, caching, more sophisticated error handling, and retry mechanisms to make the backend more robust and resilient.
+- **WebSocket Subscriptions**: Replace the current HTTP polling (`setInterval`) for payment checking with a real-time WebSocket subscription to a service like Mempool.space. This would provide instant updates and be more efficient than repeated polling.
+- **Global State Management**: As the application grows, consider integrating a dedicated state management library (e.g., Zustand, Redux Toolkit) for more predictable and maintainable state logic.
+- **Error Monitoring**: Integrate an error monitoring service like Sentry or LogRocket to proactively track, diagnose, and resolve issues in production.
+
+### Testing
+
+- **End-to-End (E2E) Tests**: Add a suite of E2E tests using a framework like Cypress or Playwright. This would allow for automated testing of complete user workflows, from generating a wallet to confirming a payment.
+
+### Features
+
+- **Multi-Explorer Support**: Add an option to switch between different public blockchain data sources (e.g., Blockstream.info).
+- **Payment Request Timeout**: Implement a user-facing timer that voids the payment request after a certain period (e.g., 15 minutes).
+- **UI/UX Polish**: Introduce more fluid animations and page transitions with a library like Framer Motion to enhance the user experience.
+- **Fiat Value Display**: Add a feature to show the real-time fiat value (e.g., in USD) of the requested BTC amount.
 
 ## License
 
@@ -210,7 +280,7 @@ This project is licensed under the MIT License.
 
 **Is this safe to use with real Bitcoin?**
 
-> **NO.** This application is for **Testnet purposes only**. It is a developer tool and does not follow the security best practices required for handling real funds.
+> **NO.** This application is for **Testnet purposes only**. It is a tool for testing and experimentation and does not follow the security best practices required for handling real funds.
 
 **Where is my wallet information stored?**
 

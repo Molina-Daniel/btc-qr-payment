@@ -7,9 +7,17 @@ import {
   Hourglass,
   Info,
   Loader2,
+  RefreshCw,
   XCircle,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { PaymentStatusEnum } from "@/types";
 import { usePayment } from "@/contexts/PaymentContext";
 
@@ -67,7 +75,7 @@ const StatusIcon = ({ status }: { status: PaymentStatusEnum }) => {
 };
 
 const PaymentStatus = () => {
-  const { paymentStatus } = usePayment();
+  const { paymentStatus, resetState } = usePayment();
 
   if (!paymentStatus) return null;
 
@@ -96,6 +104,18 @@ const PaymentStatus = () => {
           </div>
         )}
       </CardContent>
+      {paymentStatus.status === "PAYMENT_CONFIRMED" ||
+        (paymentStatus.status === "API_ERROR" && (
+          <CardFooter className="flex-col space-y-2">
+            <Button
+              onClick={resetState}
+              size="lg"
+              className="w-full text-lg py-6 bg-accent hover:bg-accent/90 text-accent-foreground"
+            >
+              <RefreshCw className="mr-2 h-5 w-5" /> Start Over
+            </Button>
+          </CardFooter>
+        ))}
     </Card>
   );
 };

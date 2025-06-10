@@ -19,6 +19,7 @@ interface PaymentContextType {
   isProcessing: boolean;
   error: string | null;
   submitPaymentRequest: (amount: string) => void;
+  resetState: () => void;
 }
 
 const PaymentContext = createContext<PaymentContextType | undefined>(undefined);
@@ -81,6 +82,15 @@ export function PaymentProvider({ children }: { children: ReactNode }) {
     checkPaymentStatus(newAmount, now);
   };
 
+  const resetState = () => {
+    setBtcAmount("");
+    setRequestTimestamp(null);
+    setPaymentStatus(null);
+    setReceivedPayments([]);
+    setIsProcessing(false);
+    setError(null);
+  };
+
   useEffect(() => {
     if (!btcAmount || !wallet || !requestTimestamp) return;
 
@@ -110,6 +120,7 @@ export function PaymentProvider({ children }: { children: ReactNode }) {
         isProcessing,
         error,
         submitPaymentRequest,
+        resetState,
       }}
     >
       {children}

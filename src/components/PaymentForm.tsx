@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DollarSign, QrCode } from "lucide-react";
 import Decimal from "decimal.js";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { Label } from "@radix-ui/react-label";
 import { usePayment } from "@/contexts/PaymentContext";
 
 const PaymentForm = () => {
-  const { submitPaymentRequest } = usePayment();
+  const { btcAmount, submitPaymentRequest } = usePayment();
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
 
@@ -47,7 +47,6 @@ const PaymentForm = () => {
     }
 
     setAmount(value);
-
     if (error) {
       const validationError = validateAmount(value);
       setError(validationError);
@@ -64,10 +63,16 @@ const PaymentForm = () => {
     }
 
     setError("");
-
     const preciseAmount = new Decimal(amount);
     submitPaymentRequest(preciseAmount.toFixed(8));
   };
+
+  useEffect(() => {
+    if (btcAmount === "") {
+      setAmount("");
+      setError("");
+    }
+  }, [btcAmount]);
 
   return (
     <Card className="w-full max-w-lg shadow-2xl bg-card/80 backdrop-blur-sm">

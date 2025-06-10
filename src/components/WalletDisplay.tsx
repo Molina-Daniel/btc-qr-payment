@@ -155,12 +155,10 @@ const WalletDisplay = () => {
               <ClipboardCopy className="h-4 w-4" />
             </Button>
           </div>
-          <p className="mt-3 text-xs text-amber-500 flex items-center">
-            <AlertTriangle className="mr-2 h-14 w-14 text-amber-600" /> This
-            wallet is generated locally in your browser. We do not store your
-            mnemonic or private key, so please save them carefully if you wish
-            to recover this wallet later. Do not share these secrets. For
-            testnet use only.
+          <p className="mt-3 pr-2 text-xs text-amber-500 flex items-center">
+            <AlertTriangle className="mr-2 h-10 w-10 text-amber-600" /> We do
+            not store your mnemonic or private key; save them to recover this
+            wallet later. For testnet use only.
           </p>
         </div>
       </CardContent>

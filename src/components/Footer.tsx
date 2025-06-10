@@ -24,7 +24,7 @@ const Footer = () => {
         </div>
         <Button variant="ghost" asChild>
           <a
-            href="https://github.com/Molina-Daniel/"
+            href="https://github.com/Molina-Daniel/btc-qr-payment"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center"

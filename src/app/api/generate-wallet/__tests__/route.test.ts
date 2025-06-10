@@ -31,16 +31,9 @@ jest.mock("bip39", () => ({
   mnemonicToSeed: jest.fn(() => Promise.resolve(Buffer.from("mockedseed"))),
 }));
 
-jest.mock("tiny-secp256k1", () => ({
-  // Add minimum required properties
-  isPoint: jest.fn(),
-  isPrivate: jest.fn(),
-  pointFromScalar: jest.fn(),
-  pointAddScalar: jest.fn(),
-  privateAdd: jest.fn(),
-  privateSub: jest.fn(),
-  sign: jest.fn(),
-  verify: jest.fn(),
+jest.mock("@bitcoinerlab/secp256k1", () => ({
+  __esModule: true,
+  default: {},
 }));
 
 // Create a mock child node and derivePath

@@ -13,11 +13,9 @@ const customJestConfig = {
   // The test file you have is in a __tests__ directory
   testMatch: ["**/__tests__/**/*.test.[jt]s?(x)"],
   moduleNameMapper: {
-    // Force tiny-secp256k1 and its dependency to resolve to their CJS files
-    "^tiny-secp256k1$":
-      "<rootDir>/node_modules/tiny-secp256k1/lib/cjs/index.cjs",
-    "^uint8array-tools$":
-      "<rootDir>/node_modules/uint8array-tools/src/cjs/index.cjs",
+    // Force @bitcoinerlab/secp256k1 to resolve to its CJS file
+    "^@bitcoinerlab/secp256k1$":
+      "<rootDir>/node_modules/@bitcoinerlab/secp256k1/dist/index.js",
     // Handle module aliases
     "^@/components/(.*)$": "<rootDir>/src/components/$1",
     "^@/app/(.*)$": "<rootDir>/src/app/$1",

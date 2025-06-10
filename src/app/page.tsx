@@ -23,9 +23,9 @@ export default function Home() {
           <>
             <Header />
             <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center justify-start">
-              <div className="w-full max-w-4xl space-y-8 flex flex-col items-center justify-center">
+              <div className="w-full max-w-xl space-y-8 flex flex-col items-center justify-center">
                 <WalletDisplay />
-                <PaymentForm />
+                {!btcAmount && <PaymentForm />}
                 {wallet && btcAmount && (
                   <>
                     <PaymentQR />

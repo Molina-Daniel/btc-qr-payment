@@ -42,7 +42,7 @@ const WalletDisplay = () => {
   };
 
   return (
-    <Card className="w-full max-w-lg shadow-2xl bg-card/80 backdrop-blur-sm">
+    <Card className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in">
       <CardHeader>
         <CardTitle className="flex items-center text-2xl font-headline">
           <WalletCards className="mr-3 h-7 w-7 text-primary" />

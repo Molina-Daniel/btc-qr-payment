@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
-import { ClipboardCopy, QrCodeIcon } from "lucide-react";
+import { ClipboardCopy, QrCodeIcon, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/contexts/WalletContext";
@@ -8,7 +8,7 @@ import { usePayment } from "@/contexts/PaymentContext";
 
 const PaymentQR = () => {
   const { wallet } = useWallet();
-  const { btcAmount } = usePayment();
+  const { btcAmount, resetState } = usePayment();
 
   if (!wallet || !btcAmount) return null;
 
@@ -25,7 +25,7 @@ const PaymentQR = () => {
   };
 
   return (
-    <Card className="w-full max-w-lg shadow-2xl bg-card/80 backdrop-blur-sm">
+    <Card className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in">
       <CardHeader>
         <CardTitle className="text-2xl font-headline flex items-center justify-center">
           <QrCodeIcon className="mr-3 h-7 w-7 text-primary" /> Scan to Pay
@@ -50,12 +50,21 @@ const PaymentQR = () => {
             </span>
           </p>
         </div>
-        <Button
-          variant="outline"
-          onClick={() => handleCopyUri(bitcoinUri, "Bitcoin URI")}
-        >
-          <ClipboardCopy className="mr-2 h-4 w-4" /> Copy Bitcoin URI
-        </Button>
+        <div className="flex-col space-y-8 mt-20 w-full flex items-center justify-center">
+          <Button
+            variant="outline"
+            onClick={() => handleCopyUri(bitcoinUri, "Bitcoin URI")}
+          >
+            <ClipboardCopy className="mr-2 h-4 w-4" /> Copy Bitcoin URI
+          </Button>
+          <Button
+            onClick={resetState}
+            size="lg"
+            className="w-full text-lg py-6 bg-accent hover:bg-accent/90 text-accent-foreground"
+          >
+            <RefreshCw className="mr-2 h-5 w-5" /> Create Another Payment
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

@@ -8,7 +8,7 @@ const HeroSection = () => {
   const { generateWallet, isGenerating } = useWallet();
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center animate-fade-in">
       <div className="text-center space-y-8 max-w-4xl mx-auto">
         <div className="space-y-4">
           <h1 className="text-5xl md:text-6xl font-bold text-foreground">

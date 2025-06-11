@@ -42,7 +42,10 @@ const WalletDisplay = () => {
   };
 
   return (
-    <Card className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in">
+    <Card
+      className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in"
+      data-testid="wallet-display"
+    >
       <CardHeader>
         <CardTitle className="flex items-center text-2xl font-headline">
           <WalletCards className="mr-3 h-7 w-7 text-primary" />
@@ -59,6 +62,7 @@ const WalletDisplay = () => {
           </Label>
           <div className="flex items-center space-x-2">
             <Input
+              data-testid="btc-address"
               id="btcAddress"
               readOnly
               value={wallet.address}

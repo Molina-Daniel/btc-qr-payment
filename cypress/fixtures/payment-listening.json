@@ -1,0 +1,11 @@
+{
+  "paymentStatus": {
+    "status": "LISTENING",
+    "address": "tb1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz9a",
+    "amount": 0.0012345,
+    "confirmations": 0,
+    "message": "Listening for payment...",
+    "error": null
+  },
+  "receivedPayments": []
+}

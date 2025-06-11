@@ -80,7 +80,10 @@ const PaymentStatus = () => {
   if (!paymentStatus) return null;
 
   return (
-    <Card className="w-full shadow-2xl bg-card/80 backdrop-blur-sm text-center animate-fade-in">
+    <Card
+      className="w-full shadow-2xl bg-card/80 backdrop-blur-sm text-center animate-fade-in"
+      data-testid="payment-status"
+    >
       <CardHeader>
         <CardTitle className="text-2xl font-headline flex items-center justify-center">
           Payment Status

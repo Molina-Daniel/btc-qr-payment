@@ -75,7 +75,10 @@ const PaymentForm = () => {
   }, [btcAmount]);
 
   return (
-    <Card className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in">
+    <Card
+      className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in"
+      data-testid="payment-form"
+    >
       <CardHeader>
         <CardTitle className="text-2xl font-headline flex items-center">
           <DollarSign className="mr-2 h-7 w-7 text-primary" />
@@ -102,6 +105,7 @@ const PaymentForm = () => {
             {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
           </div>
           <Button
+            data-testid="create-payment-qr-button"
             type="submit"
             className="w-full text-lg py-6 bg-blue-400 hover:bg-primary/90 text-white"
             disabled={!!error || !amount}

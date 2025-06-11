@@ -8,6 +8,8 @@ A Next.js-based web application that allows anyone to instantly generate Bitcoin
 
 This project is a tool designed to simplify the process of testing Bitcoin Testnet payment flows. It provides a seamless, single-page application experience with the following workflow:
 
+**Live Demo:** [https://btc-qr-payment.vercel.app/](https://btc-qr-payment.vercel.app/)
+
 1.  **Generate Wallet**: A new, temporary Bitcoin Testnet HD wallet is created for each session.
 2.  **Set Amount**: The user specifies the amount of BTC to request.
 3.  **Display QR Code**: A QR code representing a BIP-21 payment URI is generated for easy scanning with a testnet-compatible wallet.
@@ -176,16 +178,17 @@ After the QR code is displayed, the application begins polling the blockchain. T
 
 This project is built with a modern, type-safe, and efficient stack:
 
-| Category                | Technology / Library                                                                                                                                  |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Core Framework**      | [Next.js](https://nextjs.org/) 15 (App Router), [React](https://react.dev/) 19                                                                        |
-| **Language**            | [TypeScript](https://www.typescriptlang.org/)                                                                                                         |
-| **Styling**             | [Tailwind CSS](https://tailwindcss.com/), [ShadCN/UI](https://ui.shadcn.com/)                                                                         |
-| **Bitcoin & Wallet**    | [bitcoinjs-lib](https://github.com/bitcoinjs/bitcoinjs-lib), [bip39](https://github.com/bitcoinjs/bip39), [bip32](https://github.com/bitcoinjs/bip32) |
-| **QR Code Generation**  | [qrcode.react](https://github.com/zpao/qrcode.react)                                                                                                  |
-| **State Management**    | React Context                                                                                                                                         |
-| **Testing**             | [Jest](https://jestjs.io/), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)                                    |
-| **Blockchain Data API** | [Mempool.space](https://mempool.space/docs/api) Testnet API                                                                                           |
+| Category                | Technology / Library                                                                                                                                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Core Framework**      | [Next.js](https://nextjs.org/) 15 (App Router), [React](https://react.dev/) 19                                                                         |
+| **Language**            | [TypeScript](https://www.typescriptlang.org/)                                                                                                          |
+| **Styling**             | [Tailwind CSS](https://tailwindcss.com/), [ShadCN/UI](https://ui.shadcn.com/)                                                                          |
+| **Bitcoin & Wallet**    | [bitcoinjs-lib](https://github.com/bitcoinjs/bitcoinjs-lib), [bip39](https://github.com/bitcoinjs/bip39), [bip32](https://github.com/bitcoinjs/bip32)  |
+| **QR Code Generation**  | [qrcode.react](https://github.com/zpao/qrcode.react)                                                                                                   |
+| **State Management**    | React Context                                                                                                                                          |
+| **Testing**             | [Jest](https://jestjs.io/), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/), [Cypress](https://www.cypress.io/) |
+| **Blockchain Data API** | [Mempool.space](https://mempool.space/docs/api) Testnet API                                                                                            |
+| **Deployment**          | [Vercel](https://vercel.com)                                                                                                                           |
 
 ## Performance
 
@@ -234,11 +237,15 @@ Contributions are welcome! If you have suggestions for improvements, please open
 
 ## Tests
 
+This project includes a comprehensive testing suite with both unit tests and end-to-end (E2E) tests to ensure application quality and correctness.
+
+### Unit Tests
+
 This project uses Jest for unit testing. The API routes have corresponding tests to ensure their logic is correct.
 
 ![Test Coverage](/public/test_coverage.png)
 
-To run the test suite:
+To run the unit test suite:
 
 ```bash
 npm test
@@ -250,6 +257,36 @@ To run tests in watch mode:
 npm run test:watch
 ```
 
+### End-to-End (E2E) Tests
+
+E2E tests are implemented using [Cypress](https://www.cypress.io/) to simulate real user workflows in a browser environment. This ensures that the entire application—from the UI to the backend APIs—works together as expected.
+
+The primary E2E test covers the **"Happy Path"**:
+
+1. Generating a wallet.
+2. Creating a payment request.
+3. Simulating the payment process from "Listening" to "Payment Confirmed".
+
+**Running E2E Tests:**
+
+1. **To open the Cypress Test Runner (interactive mode):**
+
+   ```bash
+   npm run cy:open
+   ```
+
+2. **To run all E2E tests headlessly in the terminal:**
+
+   ```bash
+   npm run cy:run:e2e
+   ```
+
+3. **To start the development server and run E2E tests automatically:**
+   This is the recommended way to run E2E tests locally.
+   ```bash
+   npm run test:e2e
+   ```
+
 ## Future Improvements
 
 While the current application is fully functional for its intended purpose, there are several opportunities for future enhancements to improve its robustness, efficiency, and feature set.
@@ -260,10 +297,6 @@ While the current application is fully functional for its intended purpose, ther
 - **WebSocket Subscriptions**: Replace the current HTTP polling (`setInterval`) for payment checking with a real-time WebSocket subscription to a service like Mempool.space. This would provide instant updates and be more efficient than repeated polling.
 - **Global State Management**: As the application grows, consider integrating a dedicated state management library (e.g., Zustand, Redux Toolkit) for more predictable and maintainable state logic.
 - **Error Monitoring**: Integrate an error monitoring service like Sentry or LogRocket to proactively track, diagnose, and resolve issues in production.
-
-### Testing
-
-- **End-to-End (E2E) Tests**: Add a suite of E2E tests using a framework like Cypress or Playwright. This would allow for automated testing of complete user workflows, from generating a wallet to confirming a payment.
 
 ### Features
 

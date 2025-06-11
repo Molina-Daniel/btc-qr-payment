@@ -25,7 +25,10 @@ const PaymentQR = () => {
   };
 
   return (
-    <Card className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in">
+    <Card
+      className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in"
+      data-testid="payment-qr"
+    >
       <CardHeader>
         <CardTitle className="text-2xl font-headline flex items-center justify-center">
           <QrCodeIcon className="mr-3 h-7 w-7 text-primary" /> Scan to Pay

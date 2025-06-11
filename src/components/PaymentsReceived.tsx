@@ -20,7 +20,10 @@ const PaymentsReceived = () => {
   );
 
   return (
-    <Card className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in">
+    <Card
+      className="w-full shadow-2xl bg-card/80 backdrop-blur-sm animate-fade-in"
+      data-testid="payments-received"
+    >
       <CardHeader>
         <CardTitle className="text-xl font-headline flex items-center">
           <History className="mr-3 h-7 w-7 text-primary" />

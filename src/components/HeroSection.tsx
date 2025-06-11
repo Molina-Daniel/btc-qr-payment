@@ -32,6 +32,7 @@ const HeroSection = () => {
 
         <div className="pt-4">
           <Button
+            data-testid="generate-wallet-button"
             onClick={generateWallet}
             size="lg"
             className="text-lg px-8 py-6 bg-blue-400 hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
